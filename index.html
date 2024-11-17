@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=div, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <video src="bg.mp4" autoplay muted loop class="bg"></video>
+    <br><br><br><br>
+    <form action="" class="form">
+        <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" class="input" required>
+    </div>
+    <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" class="input" required>
+    </div>
+    <div id="otp" style="display:none;">
+        <label for="OTP">OTP</label>
+        <input type="text" id="oo" name="OTP" class="input" required>
+    </div>
+        <br>
+        <button id="sub" class="submit">Submit</button>
+        <button id="veri" style="display: none;" class="submit">verify</button>
+    </form>
+    <script>
+        const sub=document.getElementById("sub")
+        const veri=document.getElementById("veri")
+
+        sub.addEventListener("click",async(e)=>{
+            e.preventDefault()
+            sub.style.display="none"
+            const otp=document.getElementById("otp");
+            veri.style.display="block"
+            otp.style.display="block"
+           
+
+
+             fetch("http://localhost:5000/send",{
+                 method: "POST",
+                 headers:{
+                     'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify({
+                     email: document.getElementById("email").value
+                 })
+
+             }).then(response => response.json())
+             .then(data => {
+                 console.log(data)
+                 alert(data.msg)
+             })
+        })
+
+        veri.addEventListener("click",async(e)=>{
+            e.preventDefault()
+            const otp=document.getElementById("oo");
+
+            fetch("http://localhost:5000/verify",{
+                method: "POST",
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    otp: otp.value
+                })
+
+            }).then(response => response.json())
+            .then(data => {
+                console.log(data)
+                alert(data.msg)
+            })
+       })
+
+
+    </script>
+</body>
+</html>
